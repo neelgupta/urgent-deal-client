@@ -9,7 +9,7 @@
 
 .vendor-onboarding::after {
     content: '';
-    background: url(../assets/images/vendor-bg.png) no-repeat center top/cover;
+    background: url(../../assets/images/vendor-bg.png) no-repeat center top/cover;
     position: fixed;
     inset: 0;
     margin: auto;
@@ -43,6 +43,8 @@
         }
     }
 
+    ul li,
+    ol li,
     .step-sm-title {
         color: var(--white);
         font-weight: 600;
@@ -139,6 +141,40 @@
             }
         }
     }
+}
+
+.terms{
+    ul li,
+    ol li,
+    .step-sm-title{
+        font-weight: 500;
+    }
+
+     a{
+        font-weight: 500;
+        color: var(--primary);
+        text-decoration: underline;
+
+        &:hover{
+            color: var(--white);
+        }
+     }
+
+    .common-btn{
+        text-decoration: none;
+        width: fit-content !important;
+        height: fit-content !important;
+    }
+}
+
+.terms-title{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
 }
 
 .onboarding-form {
@@ -316,6 +352,7 @@
         margin-bottom: 26px;
     }
 
+    .terms ul li, .terms ol li, .terms .step-sm-title
     .onboarding-rightpart .process-sm-title,
     .onboarding-rightpart .step-sm-title,
     .onboarding-rightpart .title p {
