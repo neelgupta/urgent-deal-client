@@ -490,7 +490,6 @@ const VendorOnboarding = () => {
                         <Button
                           type="submit"
                           className="common-btn"
-                          disabled={isSubmitting || !isValid}
                         >
                           Continue
                         </Button>
@@ -616,7 +615,6 @@ const VendorOnboarding = () => {
                             <Button
                               type="submit"
                               className="common-btn"
-                              disabled={isSubmitting || !isValid}
                             >
                               Continue
                             </Button>
@@ -715,7 +713,6 @@ const VendorOnboarding = () => {
                             <Button
                               type="submit"
                               className="common-btn"
-                              disabled={!isValid}
                             >
                               Continue
                             </Button>
@@ -793,7 +790,7 @@ const VendorOnboarding = () => {
                           <Button
                             type="submit"
                             className="common-btn"
-                            disabled={isSubmitting || !isValid}
+                            disabled={isSubmitting}
                             onClick={(e) => {
                               e.preventDefault();
                               postFormData(values)
