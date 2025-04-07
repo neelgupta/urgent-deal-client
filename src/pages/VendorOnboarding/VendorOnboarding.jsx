@@ -9,11 +9,6 @@ import "leaflet/dist/leaflet.css";
 import "./VendorOnboarding.scss";
 import { Link } from "react-router-dom";
 
-// const validatePhoneUniqueness = async (phone) => {
-//   const response = await fetch(`https://www.urgentdeal.com/UD-Quick-Admin-Seller-Panels/public/index.php/api/v1/auth/vendor/onboarding/check-phone?phone=${phone}`);
-//   const data = await response.json();
-//   return data.isUnique ? true : "Phone number already exists";
-// };
 
 // Form Validation
 const stepOneValidationSchema = Yup.object({
@@ -27,7 +22,6 @@ const stepOneValidationSchema = Yup.object({
     .min(9, "Phone number must be at least 9 digits")
     .max(12, "Phone number must be at most 12 digits")
     .required("Phone number is required"),
-  // .test("is-unique", "Phone number already exists", validatePhoneUniqueness),
   password: Yup.string()
     .min(8, "Password must be at least 8 characters long")
     .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
@@ -37,7 +31,18 @@ const stepOneValidationSchema = Yup.object({
 });
 
 const stepTwoValidationSchema = Yup.object({
-  storeImage: Yup.mixed().required("Store image is required"),
+  storeImage: Yup.mixed()
+    .required("Store image is required")
+    .test("fileType", "The file must be an image (png, jpg, jpeg, svg, etc.)", (value) => {
+      const allowedMimeTypes = ["image/png", "image/jpeg", "image/jpg", "image/svg+xml"];
+      return value && allowedMimeTypes.includes(value.type);
+    })
+    .test("fileExtension", "Only PNG, JPG, JPEG, and SVG are allowed", (value) => {
+      if (!value) return false;
+      const allowedExtensions = ['.png', '.jpg', '.jpeg', '.svg'];
+      const fileExtension = value.name.toLowerCase().split('.').pop();
+      return allowedExtensions.includes(`.${fileExtension}`);
+    }),
   store_name: Yup.string().required("Store Name is required"),
   store_number: Yup.string().required("Store Number is required"),
   store_floor: Yup.string().required("Floor is required"),
@@ -49,7 +54,7 @@ const stepTwoValidationSchema = Yup.object({
 
 const stepThreeValidationSchema = Yup.object({
   address: Yup.string().required("Location is required"),
-  // zone_id: Yup.string().required("Zone ID is required"),
+  zone_id: Yup.string().required("Zone is required"),
 });
 
 const stepFourValidationSchema = Yup.object({
@@ -66,6 +71,8 @@ const stepFourValidationSchema = Yup.object({
 
 // Store form data
 const VendorOnboarding = () => {
+
+  const [alert, setAlert] = useState(null);
   const [formStep, setFormStep] = useState("stepOne");
   const [formData, setFormData] = useState({
     f_name: "",
@@ -136,7 +143,6 @@ const VendorOnboarding = () => {
 
 
   // Get Location
-
   const [locationData, setLocationData] = useState(null);
   const [address, setAddress] = useState("");
   const [error, setError] = useState(null);
@@ -229,7 +235,7 @@ const VendorOnboarding = () => {
 
   //Fetch API
   const postFormData = async (value) => {
-    console.log('formData', formData)
+    // console.log('formData', formData)
     try {
       const getZoneData = options.find(ele => ele.id === parseInt(value.zone_id))
 
@@ -257,9 +263,9 @@ const VendorOnboarding = () => {
         data.append("logo", value.storeImage);
       }
 
-      data.forEach((value, key) => {
-        console.log(`${key}:`, value);
-      });
+      // data.forEach((value, key) => {
+      //   console.log(`${key}:`, value);
+      // });
 
       const response = await fetch("https://www.urgentdeal.com/UD-Quick-Admin-Seller-Panels/public/index.php/api/v1/auth/vendor/onboarding", {
         method: "POST",
@@ -270,19 +276,57 @@ const VendorOnboarding = () => {
 
       const result = await response.json();
       if (response.ok) {
-        console.log("Data posted successfully:", result);
+        setAlert({ type: 'success', message: result.message || "Data posted successfully!" });
       } else {
-        console.error("Error posting data:", result);
+        if (result.errors && result.errors.length > 0) {
+          const errorMessages = Array.isArray(result.errors)
+            ? result.errors.map((err, index) => err.message).join(' ')
+            : 'Something went wrong, Please try again latter';
+          setAlert({
+            type: 'error',
+            message: errorMessages || "Something went wrong!"
+          });
+        } else {
+          setAlert({
+            type: 'error',
+            message: "An unknown error occurred."
+          });
+        }
       }
     } catch (error) {
-      console.error("Error:", error);
+      setAlert({
+        type: 'error',
+        message: error.message || "Network error occurred!"
+      });
     }
   };
 
 
+  // Show Alert
+  const closeAlert = () => setAlert(null);
+
+  useEffect(() => {
+    if (alert) {
+      const timer = setTimeout(() => {
+        closeAlert();
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [alert]);
+
   return (
     <div className="vendor-onboarding">
       <Container>
+        <div className="position-relative">
+          {alert && (
+            <div className={`alert alert-dismissible fade show ${alert.type === 'success' ? 'alert-success' : 'alert-danger'}`} role="alert" >
+              {alert.message}
+              <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" onClick={closeAlert}
+              ></button>
+            </div>
+          )}
+        </div>
         <div className="row align-items-center gy-5">
           <div className="col-md-6">
             <div className="onboarding-rightpart">
@@ -446,7 +490,6 @@ const VendorOnboarding = () => {
                         <Button
                           type="submit"
                           className="common-btn"
-                          disabled={isSubmitting || !isValid}
                         >
                           Continue
                         </Button>
@@ -572,7 +615,6 @@ const VendorOnboarding = () => {
                             <Button
                               type="submit"
                               className="common-btn"
-                              disabled={isSubmitting || !isValid}
                             >
                               Continue
                             </Button>
@@ -642,7 +684,6 @@ const VendorOnboarding = () => {
                                 value={values.zone_id}
                                 onChange={(e) => {
                                   setFieldValue("zone_id", e.target.value)
-                                  console.log('values.zone_id', values.zone_id)
                                 }}
                                 className="form-select">
                                 <option value="" hidden selected>Select Zone</option>
@@ -672,7 +713,6 @@ const VendorOnboarding = () => {
                             <Button
                               type="submit"
                               className="common-btn"
-                              disabled={!isValid}
                             >
                               Continue
                             </Button>
@@ -750,7 +790,7 @@ const VendorOnboarding = () => {
                           <Button
                             type="submit"
                             className="common-btn"
-                            disabled={isSubmitting || !isValid}
+                            disabled={isSubmitting}
                             onClick={(e) => {
                               e.preventDefault();
                               postFormData(values)

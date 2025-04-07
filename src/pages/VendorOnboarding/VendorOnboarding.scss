@@ -7,6 +7,15 @@
     align-items: center;
 }
 
+.alert{
+    position: absolute;
+    right: 0;
+    left: 0;
+    margin: auto;
+    width: fit-content;
+
+}
+
 .vendor-onboarding::after {
     content: '';
     background: url(../../assets/images/vendor-bg.png) no-repeat center top/cover;
