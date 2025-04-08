@@ -8,12 +8,11 @@
 }
 
 .alert{
-    position: absolute;
+    position: fixed;
     right: 0;
-    left: 0;
-    margin: auto;
+    top: 0;
+    margin: 42px;
     width: fit-content;
-
 }
 
 .vendor-onboarding::after {
@@ -422,5 +421,9 @@
     .onboarding-form .terms-text,
     .form-group .form-label {
         font-size: 15px;
+    }
+
+    .alert{
+        margin: 12px;
     }
 }
