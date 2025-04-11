@@ -3,11 +3,10 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Formik, Form as FormikForm, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Button, Container } from "react-bootstrap";
-import logo from "../../assets/images/logo.png";
-import check from "../../assets/icons/check.svg";
 import "leaflet/dist/leaflet.css";
 import "./VendorOnboarding.scss";
 import { Link } from "react-router-dom";
+import images from "../../Utils/constants/images";
 
 
 // Form Validation
@@ -330,9 +329,9 @@ const VendorOnboarding = () => {
         <div className="row align-items-center gy-5">
           <div className="col-md-6">
             <div className="onboarding-rightpart">
-              <img src={logo} alt="Logo" className="logo" />
+              <img src={images.logo} alt="Logo" className="logo" />
               <div className="title">
-                <p>PARTNER WITH Urgent Deal!</p>
+                <p>PARTNER WITH Tazzy!</p>
                 <h1>Increase your online orders</h1>
               </div>
 
@@ -344,7 +343,7 @@ const VendorOnboarding = () => {
                 <div className="steps">
                   <div className="step">
                     <span>01</span>
-                    <p>Install the Urgent Deal Owner App</p>
+                    <p>Install the Tazzy Owner App</p>
                   </div>
                   <div className="step">
                     <span>02</span>
@@ -366,27 +365,27 @@ const VendorOnboarding = () => {
                 </h5>
                 <div className="process-card">
                   <div>
-                    <img src={check} alt="Check Icon" />
+                    <img src={images.check} alt="Check Icon" />
                     <p>
                       FSSAI License copy <a href="#">Apply Here</a>
                     </p>
                   </div>
                   <div>
-                    <img src={check} alt="Check Icon" />
+                    <img src={images.check} alt="Check Icon" />
                     <p>Your store menu</p>
                   </div>
                   <div>
-                    <img src={check} alt="Check Icon" />
+                    <img src={images.check} alt="Check Icon" />
                     <p>Bank details</p>
                   </div>
                   <div>
-                    <img src={check} alt="Check Icon" />
+                    <img src={images.check} alt="Check Icon" />
                     <p>
                       GSTIN <a href="#">Apply Here</a>
                     </p>
                   </div>
                   <div>
-                    <img src={check} alt="Check Icon" />
+                    <img src={images.check} alt="Check Icon" />
                     <p>PAN card copy</p>
                   </div>
                 </div>
@@ -805,7 +804,7 @@ const VendorOnboarding = () => {
                 </div>
               )}
 
-              <p className="terms-text">By logging in, I agree to Urgent Deal’s <Link to="terms-condition">terms & conditions</Link></p>
+              <p className="terms-text">By logging in, I agree to Tazzy’s <Link to="vendor-terms-condition">terms & conditions</Link></p>
             </div>
           </div>
         </div>
